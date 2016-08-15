@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Dristi Alpha</string>
+    <string name="speech_prompt">Speak now</string>
+    <string name="lang_not_supported">Language not supported</string>
+</resources>
