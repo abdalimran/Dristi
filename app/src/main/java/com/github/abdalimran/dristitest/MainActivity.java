@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity{
+
+    private RelativeLayout mainLayout;
 
     private SpeakText st;
     private final int REQ_CODE_SPEECH_INPUT = 100;
@@ -25,38 +29,32 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         commandView= (TextView) findViewById(R.id.commandView);
+        mainLayout= (RelativeLayout) findViewById(R.id.mainLayout);
+        setLongClickListener();
+
         st=new SpeakText(this);
         Log.i("Logs","onCreate");
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 st.Speak("Hello Sir. I am Dristee. What can I do for you?");
-                Log.i("Logs","Speak 1");
             }
-        }, 400);
+        }, 1000);
 
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                st.Speak("I am Dristee!");
-//                Log.i("Logs","Speak 2");
-//            }
-//        }, 4000);
-//
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                st.Speak("What can I do for you?");
-//                Log.i("Logs","Speak 3");
-//            }
-//        }, 5000);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                st.Speak(Menu());
+            }
+        }, 8000);
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 promptSpeechInput();
             }
-        }, 8000);
+        }, 20000);
     }
 
     private void promptSpeechInput() {
@@ -105,5 +103,32 @@ public class MainActivity extends AppCompatActivity{
                 break;
             }
         }
+    }
+
+    private void setLongClickListener(){
+        mainLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            public boolean onLongClick(View view) {
+                openContextMenu(view);
+                st.Speak("What can I do for you?");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        promptSpeechInput();
+                    }
+                }, 1500);
+                return true;
+            }
+        });
+        mainLayout.setLongClickable(true);
+    }
+
+    private String Menu()
+    {
+        String menu="To make a call say, make a call." +
+                    "To write a message say, write a message." +
+                    "To do a search say, perform a google search." +
+                    "To know current time and date say, what is the time and date.";
+
+        return menu;
     }
 }
